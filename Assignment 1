@@ -43,7 +43,7 @@ void b()
 void c()
 {
     printf("c.");
-    for (int i = 10; i <= 100; i += 10)  // Corrected loop condition and increment
+    for (int i = 10; i <= 100; i += 10)
     {
         printf("%d ", i);
     }
