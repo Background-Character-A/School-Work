@@ -1,0 +1,107 @@
+/*
+   NAME: RANNIE CABILI
+   DATE: APRIL 1, 2004
+   DESCRIPTION:
+      Grading System Program
+*/
+
+import java.util.Scanner;
+import java.math.RoundingMode;
+
+public class Grading_System
+{
+   public static void main(String[] args)
+   {
+      Scanner scan = new Scanner(System.in);
+      
+      System.out.println("Grading System Program");
+      
+      System.out.println();
+      int choice;
+      do 
+      {
+         System.out.println("Options:");
+         System.out.println("[1] Midterm Grade");
+         System.out.println("[2] Final Grade");
+         System.out.println("[3] Exit Program");
+         System.out.print("Press 1 or 2 or 3: ");
+         choice = scan.nextInt(); //Scans your choice
+         System.out.println();
+         
+         DecimalFormat df = new DecimalFormat(".0");
+         df.setRoundingMode(RoundingMode.DOWN);
+      
+         double quizGrade, labGrade, examGrade, result;
+         switch (choice)
+         {
+            case 1:
+               System.out.print("Enter your Quiz Grade: ");
+               quizGrade = scan.nextDouble();
+                              
+               System.out.print("Enter your Labworks Grade: ");
+               labGrade = scan.nextDouble();
+               
+               System.out.print("Enter your Midterm Exam Grade: ");
+               examGrade = scan.nextDouble();
+               
+               result = (quizGrade * 0.2) + (labGrade * 0.4) + (examGrade * 0.4); //Calculates the grades
+              
+               if (result >= 2.0) // checks if grade is higher or equal to 3.0
+                  {
+                     System.out.println();
+                     System.out.println("Your Grade: " + result);
+                     System.out.println("Remarks: Passed!");
+                     System.out.println();
+                  }
+               else
+               {
+                  System.out.println();
+                  System.out.printf("Your Grade: %.1f\n", result);
+                  System.out.println("Remarks: Failed!");
+                  System.out.println();
+               }
+               break;
+               
+            case 2:
+               System.out.print("Enter your Quiz Grade: ");
+               quizGrade = scan.nextDouble();
+                              
+               System.out.print("Enter your Labworks Grade: ");
+               labGrade = scan.nextDouble();
+               
+               System.out.print("Enter your Final Exam Grade: ");
+               examGrade = scan.nextDouble();
+               
+               result = (quizGrade * 0.2) + (labGrade * 0.4) + (examGrade * 0.4);
+               
+               if (result >= 2.0)
+                  {
+                     System.out.println();
+                     System.out.printf("Your Grade: %.1f\n", result);
+                     System.out.println("Remarks: Passed!");
+                     System.out.println();
+                  }
+               else
+               {
+                  System.out.println();
+                  System.out.printf("Your Grade: %.1f\n", result);
+                  System.out.println("Remarks: Failed!");
+                  System.out.println();
+               }
+               
+               break;
+               
+            case 3:
+               System.out.println("Buh bye!");
+               break;
+               
+            default: //If Choice is not withnin 1,2,3
+               System.out.println("Invalid Input");
+               System.out.println();
+               continue;
+         }
+      }
+      
+      while (choice != 3);
+   }
+}
