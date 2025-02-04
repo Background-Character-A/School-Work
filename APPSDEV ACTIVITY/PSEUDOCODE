@@ -1,0 +1,18 @@
+1. Ask user if user wants to buy.
+If Decision. Answer = YES
+2.If user wants to buy then display:
+ITEM NAME / ITEM QUANTITY/ ITEM PRICE
+Egg       /    50        /     10
+Banana    /    50        /     15
+Egg2      /    50        /     10
+3. If user input one of these...Ask how many of these items he wants to purchase
+4.Ask user again if he wants to buy another item
+5.Loop Step 2
+6. If user answers = No
+7.Calculate the total amount
+8.Calculate the Discount
+a.If total amount exceeds 100-199 then apply a discount of 10%
+b.If total amount exceeds 200-499 then apply a discount of 15%
+c.If total amount  exceeds 500 then apply a discount of 20%
+9. Calculate the Final Amount
+10. Display the Initial Amount, then the discount rate, lastly the final amount.
