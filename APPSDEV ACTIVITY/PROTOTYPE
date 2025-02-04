@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string answer;
+            do
+            {
+                int eggQuantity = 50;
+                int bananaQuantity = 50;
+                int egg2Quantity = 50;
+
+                double eggPrice = 50;
+                double bananaPrice = 50;
+                double egg2Price = 50;
+
+                Console.WriteLine("Do you want to buy a product? (YES/NO)");
+                answer = Console.ReadLine().ToUpper();
+                if (answer == "YES")
+                {
+                    //LOOP????
+                    //INPUT EGG/BANANA/EGG2. IF USER INPUT TRUE THEN ASK HOW MANY ITEMS USER WILL BUY. 
+                    Console.WriteLine("ITEM NAME\t" + "ITEM QUANTITY\t" + "ITEM PRICE");
+                    Console.WriteLine("Egg\t" + eggQuantity + "\t" + eggPrice);
+                    Console.WriteLine("Banana\t" + bananaQuantity + "\t" + bananaPrice);
+                    Console.WriteLine("Egg2\t" + egg2Quantity + "\t" + egg2Price);
+                }
+            }
+
+            while (answer == "yes");
+            
+            //CALCULATE THE FINAL AMOUNT
+
+            double final
+
+            
+        }
+    }
+}
