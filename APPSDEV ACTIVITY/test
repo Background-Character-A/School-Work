@@ -1,17 +1,22 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Activity
 {
-    // See https://aka.ms/new-console-template for more information
-    class Activity
+    internal class Program
     {
-        static void Main(String[] args)
+        static void Main(string[] args)
         {
-            double totalCost;
+            double totalCost = 0;
             int eggQuantity = 50;
             double eggPrice = 5;
+
             int hotdogQuantity = 50;
             double hotdogPrice = 10;
+
             int ballQuantity = 50;
             double ballPrice = 15;
             string response;
@@ -19,46 +24,64 @@ namespace Activity
             while (flag)
             {
                 Console.WriteLine("ITEM NAME\t" + "ITEM QUANTITY\t" + "ITEM PRICE");
-                Console.WriteLine("1. EGG\t" + eggQuantity + "\t" + eggPrice);
-                Console.WriteLine("2. HOTDOG\t" + hotdogQuantity + "\t" + hotdogPrice);
-                Console.WriteLine("3. BALL\t" + ballQuantity + "\t" + ballPrice);
+                Console.WriteLine("1. EGG\t\t" + eggQuantity + "\t\t" + eggPrice);
+                Console.WriteLine("2. HOTDOG  \t" + hotdogQuantity + "\t\t" + hotdogPrice);
+                Console.WriteLine("3. BALL\t\t" + ballQuantity + "\t\t" + ballPrice);
 
                 Console.WriteLine("What item do you want to purchase? (1/2/3)");
                 int itemCode = int.Parse(Console.ReadLine());
 
                 Console.WriteLine("How many do you want?");
-                int quanity = int.Parse(Console.ReadLine());
+                int quantity = int.Parse(Console.ReadLine());
 
-                switch(itemCode)
-                {}
+                double itemCost = 0;
+                switch (itemCode)
+                {
+                    case 1:
+                        itemCost = eggPrice;
+                        eggQuantity -= quantity;
+                        break;
+                    case 2:
+                        itemCost = hotdogPrice;
+                        hotdogQuantity -= quantity;
+                        break;
+                    case 3:
+                        itemCost = ballPrice;
+                        ballQuantity -= quantity;
+                        break;
 
-                
+                }
+
+                totalCost += itemCost * quantity;
+
+
                 Console.WriteLine("Do you want to add another item? (YES/NO)");
                 response = Console.ReadLine().ToUpper();
-                if(response != "YES")
+                Console.WriteLine();
+                if (response != "YES")
                 {
                     flag = false;
                 }
             }
 
             double discount = 0;
-            if(totalCost > 100 || totalCost < 199)
+            if (totalCost > 100 || totalCost < 199)
             {
                 discount = totalCost * 0.1;
             }
-            else if(totalCost > 200 || totalCost < 499)
+            else if (totalCost > 200 || totalCost < 499)
             {
                 discount = totalCost * 0.15;
             }
-            else if(totalCost > 500)
+            else if (totalCost > 500)
             {
                 discount = totalCost * 0.2;
             }
             double finalAmount = totalCost - discount;
-            Console.WriteLine(totalCost);
-            Console.WriteLine(discount);
-            Console.WriteLine(finalAmount);
+            Console.WriteLine("RESIBO:");
+            Console.WriteLine("TOTAL AMOUNT: "+totalCost);
+            Console.WriteLine("DISCOUNT AMOUNT: "+discount);
+            Console.WriteLine("FINAL AMOUNT: "+finalAmount);
         }
     }
-
 }
