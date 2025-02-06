@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//AI HELPED ME :C
 namespace Activity
 {
     internal class Program
@@ -49,6 +49,9 @@ namespace Activity
                         itemCost = ballPrice;
                         ballQuantity -= quantity;
                         break;
+                    default:
+                        Console.WriteLine("Invalid Output.");
+                        break;
 
                 }
 
@@ -61,6 +64,12 @@ namespace Activity
                 if (response != "YES")
                 {
                     flag = false;
+                }
+
+                else 
+                {
+                    Console.WriteLine("Invalid Output.");
+                    break;
                 }
             }
 
