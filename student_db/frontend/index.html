@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School V1.0</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 30px;
+    }
+
+    .app {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .app-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+      padding: 6px 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: 1px solid #999;
+      background: #fff;
+    }
+    .btn:hover { background: #f5f5f5; }
+    .btn-add { background: #4CAF50; color: #fff; border-color: #4CAF50; }
+    .btn-add:hover { background: #43a047; }
+    .btn-edit { background: #2196F3; color: #fff; border-color: #2196F3; padding: 4px 10px; font-size: 0.78rem; }
+    .btn-edit:hover { background: #1e88e5; }
+    .btn-delete { background: #f44336; color: #fff; border-color: #f44336; padding: 4px 10px; font-size: 0.78rem; }
+    .btn-delete:hover { background: #e53935; }
+    .btn-cancel { background: #fff; color: #333; }
+    .btn-save { background: #2196F3; color: #fff; border-color: #2196F3; }
+    .btn-save:hover { background: #1e88e5; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th { background: #f9f9f9; font-weight: bold; }
+    tr:hover td { background: #fafafa; }
+    .actions-cell { display: flex; gap: 6px; }
+
+    /* MODAL */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 24px;
+      width: 380px;
+      border-radius: 4px;
+    }
+    .modal-title {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; }
+    input, select {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+    }
+    input:focus, select:focus { outline: none; border-color: #2196F3; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+
+    /* CONFIRM DIALOG */
+    .confirm-box {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 24px;
+      width: 320px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .confirm-box p { margin-bottom: 20px; font-size: 0.9rem; }
+    .confirm-actions { display: flex; gap: 8px; justify-content: center; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #333;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; }
+
+    .empty-row td { text-align: center; color: #999; padding: 24px; }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <div class="app-title">SCHOOL V1.0</div>
+
+    <div class="section-header">
+      <div class="section-title">STUDENTS</div>
+      <button class="btn btn-add" onclick="openAddModal()">+ ADD</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>IDNO</th>
+          <th>LASTNAME</th>
+          <th>FIRSTNAME</th>
+          <th>COURSE</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody id="students-body">
+        <tr class="empty-row"><td colspan="6">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ADD / EDIT MODAL -->
+  <div class="overlay" id="modal">
+    <div class="modal">
+      <div class="modal-title" id="modal-title">ADD STUDENT</div>
+      <input type="hidden" id="edit-id" />
+      <div class="form-group">
+        <label>IDNO</label>
+        <input type="text" id="f-idno" placeholder="e.g. 1001" />
+      </div>
+      <div class="form-group">
+        <label>LASTNAME</label>
+        <input type="text" id="f-lastname" placeholder="Dela Cruz" />
+      </div>
+      <div class="form-group">
+        <label>FIRSTNAME</label>
+        <input type="text" id="f-firstname" placeholder="Juan" />
+      </div>
+      <div class="form-group">
+        <label>COURSE</label>
+        <select id="f-course">
+          <option value="bsit">BSIT</option>
+          <option value="bscs">BSCS</option>
+          <option value="bscpe">BSCpE</option>
+          <option value="bsee">BSEE</option>
+          <option value="bsce">BSCE</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>LEVEL</label>
+        <select id="f-level">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-save" id="modal-submit-btn" onclick="submitForm()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM -->
+  <div class="overlay" id="confirm-modal">
+    <div class="confirm-box">
+      <p>Delete this student?</p>
+      <div class="confirm-actions">
+        <button class="btn btn-cancel" onclick="closeConfirm()">Cancel</button>
+        <button class="btn btn-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API = 'http://localhost:5000/students';
+    let students = [];
+    let editMode = false;
+    let deleteTargetId = null;
+
+    async function loadStudents() {
+      try {
+        const res = await fetch(API);
+        students = await res.json();
+        renderTable();
+      } catch {
+        document.getElementById('students-body').innerHTML =
+          '<tr class="empty-row"><td colspan="6">Could not connect to server.</td></tr>';
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('students-body');
+      if (students.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No students found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = students.map((s, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${s.idno || ''}</td>
+          <td>${s.lastname || ''}</td>
+          <td>${s.firstname || ''}</td>
+          <td>${(s.course || '').toUpperCase()}</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-edit" onclick="openEditModal(${s.id})">UPDATE</button>
+              <button class="btn btn-delete" onclick="openConfirm(${s.id})">DELETE</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openAddModal() {
+      editMode = false;
+      document.getElementById('modal-title').textContent = 'ADD STUDENT';
+      document.getElementById('modal-submit-btn').textContent = 'Save';
+      document.getElementById('edit-id').value = '';
+      document.getElementById('f-idno').value = '';
+      document.getElementById('f-lastname').value = '';
+      document.getElementById('f-firstname').value = '';
+      document.getElementById('f-course').value = 'bsit';
+      document.getElementById('f-level').value = '1';
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function openEditModal(id) {
+      const s = students.find(x => x.id === id);
+      if (!s) return;
+      editMode = true;
+      document.getElementById('modal-title').textContent = 'EDIT STUDENT';
+      document.getElementById('modal-submit-btn').textContent = 'Update';
+      document.getElementById('edit-id').value = s.id;
+      document.getElementById('f-idno').value = s.idno || '';
+      document.getElementById('f-lastname').value = s.lastname || '';
+      document.getElementById('f-firstname').value = s.firstname || '';
+      document.getElementById('f-course').value = (s.course || 'bsit').toLowerCase();
+      document.getElementById('f-level').value = s.level || '1';
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    async function submitForm() {
+      const data = {
+        idno: document.getElementById('f-idno').value.trim(),
+        lastname: document.getElementById('f-lastname').value.trim(),
+        firstname: document.getElementById('f-firstname').value.trim(),
+        course: document.getElementById('f-course').value,
+        level: document.getElementById('f-level').value
+      };
+
+      if (!data.idno || !data.lastname || !data.firstname) {
+        showToast('Please fill in all fields.'); return;
+      }
+
+      try {
+        if (editMode) {
+          const id = document.getElementById('edit-id').value;
+          await fetch(API, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, ...data })
+          });
+          showToast('Student updated.');
+        } else {
+          await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          showToast('Student added.');
+        }
+        closeModal();
+        loadStudents();
+      } catch {
+        showToast('Error. Try again.');
+      }
+    }
+
+    function openConfirm(id) {
+      deleteTargetId = id;
+      document.getElementById('confirm-modal').classList.add('open');
+    }
+
+    function closeConfirm() {
+      deleteTargetId = null;
+      document.getElementById('confirm-modal').classList.remove('open');
+    }
+
+    async function confirmDelete() {
+      try {
+        await fetch(`${API}/${deleteTargetId}`, { method: 'DELETE' });
+        showToast('Student deleted.');
+        closeConfirm();
+        loadStudents();
+      } catch {
+        showToast('Error deleting student.');
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+    document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeConfirm(); });
+
+    loadStudents();
+  </script>
+</body>
+</html>
